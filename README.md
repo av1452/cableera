@@ -2,6 +2,8 @@
 
 *Your childhood. Your channels. Your TV.*
 
+**Live:** https://av1452.github.io/cableera/
+
 CableEra is a nostalgic, cable-box-style TV app: a blue program guide, numbered channels, live-style simulated schedules, and an on-demand library of the shows people grew up with, from 1990s cartoons to early-2010s Disney Channel. It is built as a responsive PWA and tuned for large foldable inner displays, but works on phones, tablets and desktops.
 
 It is honest about what plays. Only verified public-domain films stream inside CableEra. Everything else is a guide listing with metadata.
