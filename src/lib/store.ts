@@ -41,6 +41,7 @@ export const DEFAULT_PREFS: UserPreferences = {
   bootEffect: true,
   preferredEras: [],
   birthYear: null,
+  services: [],
 }
 
 function fresh(): UserData {
@@ -101,6 +102,9 @@ export const actions = {
   tuneChannel(id: string) {
     set({ ...state, lastChannel: id, recentChannels: [id, ...state.recentChannels.filter((c) => c !== id)].slice(0, 8) })
   },
+
+  toggleService: (id: string) =>
+    set({ ...state, prefs: { ...state.prefs, services: toggle(state.prefs.services, id) } }),
 
   setPrefs: (patch: Partial<UserPreferences>) => set({ ...state, prefs: { ...state.prefs, ...patch } }),
 

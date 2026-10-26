@@ -39,6 +39,7 @@ export type RightsStatus =
   | 'public-domain-not-renewed' // US copyright lapsed for non-renewal; status reported by source archive
   | 'copyrighted'
   | 'licensed'
+  | 'official-embed' // the rights holder's own upload, played through the host's embedded player
 
 export interface ContentRights {
   status: RightsStatus
@@ -55,14 +56,28 @@ export interface Provider {
   name: string
   homepage: string
   kind: 'subscription' | 'free' | 'archive' | 'search'
+  /** Short label for compact badges, e.g. "D+". */
+  short?: string
+  hue?: number
+  /** Matches this provider's name as reported by availability data. */
+  match?: RegExp
+  /** Offered in the "My services" picker. */
+  pickable?: boolean
   /** Builds a search URL for a title, when the provider supports it. */
   searchUrl?: (title: string) => string
 }
 
+export type OfferType = 'sub' | 'free' | 'buy' | 'rent' | 'tve'
+
+/** A checked, title-specific link to a streaming service. */
 export interface ProviderLink {
   providerId: string
+  providerName: string
+  type: OfferType
   url: string
-  /** True only when someone confirmed the title is on this provider. */
+  /** Seasons the provider carries, when reported. */
+  seasons?: number | null
+  /** True only when the link came from a verification step (a person or the availability job). */
   verified: boolean
   lastChecked: string | null
 }
@@ -114,6 +129,12 @@ export interface Caption {
 
 export interface MediaSource {
   id: string
+  /** 'file' plays in <video>; 'youtube' plays through YouTube's embedded player. */
+  kind: 'file' | 'youtube'
+  /** YouTube video id, for kind 'youtube'. */
+  youtubeId?: string
+  /** Uploading channel, for kind 'youtube'. */
+  channel?: { name: string; handle: string; url: string }
   url: string
   mime: string
   width: number
@@ -196,6 +217,8 @@ export interface UserPreferences {
   scanlines: boolean
   bootEffect: boolean
   preferredEras: Era[]
+  /** Provider ids of the streaming services the viewer subscribes to. */
+  services: string[]
   birthYear: number | null
 }
 
