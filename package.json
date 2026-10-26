@@ -2,7 +2,21 @@
   "name": "cableera",
   "private": true,
   "version": "0.1.0",
+  "description": "A nostalgic cable-guide TV PWA: public-domain classics that play, and checked links to where everything else streams.",
+  "license": "MIT",
+  "author": "Aidan Vazquez",
+  "homepage": "https://av1452.github.io/cableera/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/av1452/cableera.git"
+  },
+  "bugs": {
+    "url": "https://github.com/av1452/cableera/issues"
+  },
   "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -11,13 +25,15 @@
     "media:refresh": "node scripts/fetch-commons-media.mjs",
     "data:availability": "node scripts/fetch-availability.mjs",
     "data:youtube": "node scripts/fetch-youtube-media.mjs",
-    "data:refresh": "npm run data:availability && npm run data:youtube"
+    "data:refresh": "npm run data:availability && npm run data:youtube",
+    "test": "playwright test"
   },
   "dependencies": {
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
@@ -25,8 +41,5 @@
     "oxlint": "^1.88.0",
     "typescript": "~6.0.3",
     "vite": "^8.3.4"
-  },
-  "engines": {
-    "node": ">=22.18"
   }
 }
