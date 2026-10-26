@@ -98,11 +98,13 @@ export function GuidePage() {
                   ? `Starts ${fmtTime(selected.start)}`
                   : selected.end <= now
                     ? 'Aired earlier'
-                    : selected.playable
-                      ? prefs.guidePreviews
-                        ? 'Tuning…'
-                        : 'On now'
-                      : 'Listing only'
+                    : !selected.playable
+                      ? 'Listing only'
+                      : !itemAt(selected, now)
+                        ? `Station break · back at ${fmtTime(selected.end)}`
+                        : prefs.guidePreviews
+                          ? 'Tuning…'
+                          : 'On now'
               }
             />
           )}

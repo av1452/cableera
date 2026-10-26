@@ -37,25 +37,6 @@ export function ProgramDetails({ entry, channel, now }: { entry: ScheduleEntry; 
       )}
       <p className="details-desc">{show.description}</p>
 
-      {entry.items.length > 0 && (
-        <ol className="details-items">
-          {entry.items.map((it) => {
-            const ep = getEpisode(it.episodeId)!
-            const isNow = current?.episodeId === it.episodeId
-            return (
-              <li key={it.episodeId} className={isNow ? 'is-now' : ''}>
-                <span className="muted">{fmtTime(it.start)}</span> {ep.title}{' '}
-                <span className="muted">
-                  ({ep.year}, {fmtRuntime(ep.runtimeSec)})
-                </span>
-                {isNow && <span className="live-pill small">Now</span>}
-              </li>
-            )
-          })}
-          {live && !current && <li className="is-now">Station break: next block at {fmtTime(entry.end)}</li>}
-        </ol>
-      )}
-
       <div className="details-actions">
         {entry.playable && live && (
           <a className="btn btn-primary" href={href(`/tune/${channel.id}`)}>
@@ -78,6 +59,25 @@ export function ProgramDetails({ entry, channel, now }: { entry: ScheduleEntry; 
         </a>
         <FavoriteButton showId={show.id} small />
       </div>
+      {entry.items.length > 0 && (
+        <ol className="details-items">
+          {entry.items.map((it) => {
+            const ep = getEpisode(it.episodeId)!
+            const isNow = current?.episodeId === it.episodeId
+            return (
+              <li key={it.episodeId} className={isNow ? 'is-now' : ''}>
+                <span className="muted">{fmtTime(it.start)}</span> {ep.title}{' '}
+                <span className="muted">
+                  ({ep.year}, {fmtRuntime(ep.runtimeSec)})
+                </span>
+                {isNow && <span className="live-pill small">Now</span>}
+              </li>
+            )
+          })}
+          {live && !current && <li className="is-now">Station break: next block at {fmtTime(entry.end)}</li>}
+        </ol>
+      )}
+
       {!entry.playable && (
         <p className="fine">
           {show.providerLinks.length

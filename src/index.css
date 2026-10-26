@@ -893,6 +893,7 @@ input[type='number'] {
   max-height: 46%;
   min-height: 0;
   overflow: hidden;
+  grid-template-rows: minmax(0, 1fr);
 }
 .preview {
   position: relative;
@@ -927,6 +928,8 @@ input[type='number'] {
 
 .details {
   min-width: 0;
+  min-height: 0;
+  max-height: 100%;
   overflow-y: auto;
   padding-right: 4px;
 }
@@ -971,7 +974,7 @@ input[type='number'] {
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-  margin-top: 10px;
+  margin: 10px 0 4px;
 }
 
 .guide-bar {
@@ -988,6 +991,7 @@ input[type='number'] {
   flex-wrap: wrap;
 }
 .guide-date {
+  white-space: nowrap;
   font-family: var(--font-num);
   color: var(--gold);
   margin-right: 4px;
