@@ -1,12 +1,47 @@
-# CableEra
+<h1 align="center">
+  <img src="public/icon.svg" width="88" alt=""><br>
+  CableEra
+</h1>
 
-*Your childhood. Your channels. Your TV.*
+<p align="center"><em>Your childhood. Your channels. Your TV.</em></p>
 
-**Live:** https://av1452.github.io/cableera/
+<p align="center">
+  <a href="https://av1452.github.io/cableera/"><strong>▶ Open the live app</strong></a>
+</p>
 
-CableEra is a nostalgic, cable-box-style TV app: a blue program guide, numbered channels, live-style simulated schedules, and an on-demand library of the shows people grew up with, from 1990s cartoons to early-2010s Disney Channel. It is built as a responsive PWA and tuned for large foldable inner displays, but works on phones, tablets and desktops.
+<p align="center">
+  <a href="https://github.com/av1452/cableera/actions/workflows/ci.yml"><img src="https://github.com/av1452/cableera/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/av1452/cableera/actions/workflows/pages.yml"><img src="https://github.com/av1452/cableera/actions/workflows/pages.yml/badge.svg" alt="Deploy"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2b8cff" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/PWA-installable-ffd04a" alt="Installable PWA">
+</p>
 
-It is honest about what plays. Only verified public-domain films stream inside CableEra. Everything else is a guide listing with metadata.
+<p align="center">
+  <img src="docs/screenshots/guide.jpg" alt="CableEra's cable-style TV guide: a live preview window above a grid of ten numbered channels" width="900">
+</p>
+
+CableEra is a nostalgic, cable-box-style TV app: a blue program guide, numbered channels, live-style schedules, and a library of the shows people grew up with, from 1920s cartoons to early-2010s Disney Channel. It's a responsive PWA tuned for large foldable inner displays, and it works on phones, tablets and desktops.
+
+It's honest about what plays. Public-domain classics and official uploads stream right in the guide. Everything else gets checked, dated links to the streaming services that carry it, with your own services first.
+
+## Highlights
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/tune.jpg" alt="Live-style tuning: a 1927 Oswald cartoon joined in progress on channel 005"><br><b>Tune in like it's live.</b> Channels run simulated schedules, so you join the episode already in progress, with station breaks, channel up/down, and number-pad tuning.</td>
+    <td width="50%"><img src="docs/screenshots/show.jpg" alt="Hey Arnold! show page with a Watch on Paramount+ button"><br><b>Watch on your services.</b> Pick the services you have, and shows on them get a <i>Watch on Paramount+</i>-style button and a badge in the guide.</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/home.jpg" alt="Home screen with what's on now across ten channels"><br><b>What's on now.</b> A TV-style home screen with Continue Watching, programming blocks like After School and Saturday Morning, and recommendations.</td>
+    <td width="50%"><img src="docs/screenshots/foldable.jpg" alt="Guide at a foldable inner-display size"><br><b>Built for big foldables.</b> The guide, preview and details fit together on large inner displays; 4:3 classics stay 4:3, pillarboxed and never stretched.</td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="docs/screenshots/phone-guide.jpg" alt="Guide on a phone" width="260">
+  &nbsp;
+  <img src="docs/screenshots/phone-show.jpg" alt="Gravity Falls show page on a phone, with Watch on Disney+" width="260">
+</p>
 
 ## Quick start
 
@@ -16,9 +51,10 @@ npm run dev          # http://localhost:5173
 npm run build        # type-check + production build into dist/
 npm run preview      # serve dist/ at http://localhost:4173
 npm run lint
+npm test             # end-to-end tests (first run: npx playwright install chromium)
 ```
 
-Requires Node 20+.
+Requires Node 22.18+. Want to help? See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## What's in it
 
@@ -146,7 +182,9 @@ The service worker (production only) caches the app shell for offline guide acce
 
 ## Testing status
 
-Tested on 2026-10-25 against the production build with Playwright (Chromium and WebKit):
+`npm test` runs 19 Playwright tests against the production build on every push and pull request ([CI](.github/workflows/ci.yml)): guide rendering and keyboard navigation, select-then-tune, no Play button on listings, 4:3 playback without stretching, progress save and resume, media-error handling, YouTube player teardown, favorites and services persistence, search, artwork fallbacks, and phone layout. External media is stubbed, so results don't depend on Wikimedia or YouTube.
+
+Manual testing on 2026-10-25 against the production build with Playwright (Chromium and WebKit):
 
 - **Desktop (1440×900):** guide renders 666 cells. Cell selection, arrow-key navigation, the live preview, live tuning (joins in progress), PageUp and number-pad tuning, the 4:3 frame for 4:3 sources and 16:9 for 16:9, progress save and resume after reload, Continue Watching, favorites persisting, search, the playable filter (9 series), no Play button on copyrighted shows, the leaving-CableEra dialog, and no console errors all passed.
 - **Foldable sizes (1060×840 landscape, 840×1020 portrait):** no horizontal overflow and no errors.
