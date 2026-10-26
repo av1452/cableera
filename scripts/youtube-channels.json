@@ -1,0 +1,15 @@
+{
+  "_comment": "Allowlist of official rights-holder YouTube channels. Only uploads from these handles can play in CableEra. Add a channel only after confirming it is the studio's or network's own verified channel. Rules match full-episode titles to catalog shows; the first capture group is the episode number.",
+  "channels": [
+    {
+      "handle": "@pokemon",
+      "channelId": "UCFctpiB_Hnlk3ejWfHqSm6Q",
+      "name": "The Official Pokémon YouTube channel",
+      "owner": "The Pokémon Company International",
+      "confirmed": "2026-10-25: oEmbed author of 'Pokémon – I Choose You! [FULL EPISODE]' (Zyt2GKb6qWw); channel announced on pokemon.com",
+      "rules": [
+        { "showId": "pokemon", "season": 1, "year": 1997, "title": "\\[FULL EPISODE\\].*Pok[eé]mon: Indigo League Episode (\\d+)" }
+      ]
+    }
+  ]
+}
