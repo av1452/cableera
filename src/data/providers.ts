@@ -71,7 +71,10 @@ export function groupOffers(show: Show, services: string[]): Offers {
   const links = show.providerLinks.filter((l) => l.verified)
   const yours = links.filter((l) => (l.type === 'sub' || l.type === 'free') && services.includes(l.providerId))
   const isYours = (l: ProviderLink) => yours.includes(l)
-  const dedupe = (list: ProviderLink[]) => list.filter((l, i) => list.findIndex((x) => x.providerId === l.providerId) === i)
+  // Well-known streaming services first; cable on-demand and niche services after.
+  const rank = (l: ProviderLink) => (getProvider(l.providerId)?.pickable ? 0 : 1)
+  const dedupe = (list: ProviderLink[]) =>
+    list.filter((l, i) => list.findIndex((x) => x.providerId === l.providerId) === i).sort((a, b) => rank(a) - rank(b))
   return {
     yours: dedupe(yours),
     free: dedupe(links.filter((l) => l.type === 'free' && !isYours(l))),
