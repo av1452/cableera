@@ -145,7 +145,10 @@ export function WatchOptions({ show, compact }: { show: Show; compact?: boolean 
     setChosen(l)
     ref.current?.showModal()
   }
-  const primary = offers.yours.length ? offers.yours : offers.free.length ? offers.free : offers.subscription.slice(0, 2)
+  // Headline buttons: the viewer's services, else free options, else up to two
+  // subscriptions (well-known services only, when the show is on any).
+  const known = offers.subscription.filter((l) => getProvider(l.providerId)?.pickable)
+  const primary = offers.yours.length ? offers.yours : offers.free.length ? offers.free : (known.length ? known : offers.subscription).slice(0, 2)
   const rest = [...offers.yours, ...offers.free, ...offers.subscription].filter((l) => !primary.includes(l))
   const checked = offers.lastChecked ? new Date(offers.lastChecked).toLocaleDateString() : null
 
