@@ -31,7 +31,7 @@ interface AvailabilityData {
     string,
     {
       checkedAt: string
-      offers: { name: string; type: OfferType; webUrl: string | null; iosUrl: string | null; androidUrl: string | null; seasons: number | null }[]
+      offers: { name: string; type: OfferType; webUrl: string | null; iosUrl?: string | null; androidUrl?: string | null; seasons: number | null }[]
     }
   >
 }
@@ -156,7 +156,7 @@ for (const [showId, t] of Object.entries(availability?.titles ?? {})) {
   const show = showById.get(showId)
   if (!show || Date.now() - Date.parse(t.checkedAt) > MAX_AGE_MS) continue
   show.providerLinks = t.offers.flatMap((o) => {
-    const url = o.webUrl ?? (isIOS ? o.iosUrl : isAndroid ? o.androidUrl : null)
+    const url = o.webUrl ?? (isIOS ? o.iosUrl : isAndroid ? o.androidUrl : null) ?? null
     if (!url || !/^https:\/\//.test(url)) return []
     const providerId = providerIdForName(o.name)
     return [{ providerId, providerName: getProvider(providerId)?.name ?? o.name, type: o.type, url, seasons: o.seasons, verified: true, lastChecked: t.checkedAt }]

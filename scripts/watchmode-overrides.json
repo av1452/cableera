@@ -6,5 +6,21 @@
   "aesops-fables": null,
   "winsor-mccay": null,
   "oswald": null,
-  "koko-the-clown": null
+  "koko-the-clown": null,
+  "pokemon-black-white": 3165932,
+  "billy-and-mandy": 3123346,
+  "digimon": 331922,
+  "tom-and-jerry": 3317924,
+  "looney-tunes": null,
+  "fleischer-superman": null,
+  "charlie-brown-christmas": 4128932,
+  "great-pumpkin": 527613,
+  "grinch-1966": 4129680,
+  "_notes": {
+    "pokemon-black-white": "Watchmode lists Black & White under the main Pokémon series",
+    "billy-and-mandy": "Watchmode dates it 2001 (from Grim & Evil), outside the ±1 year match window",
+    "digimon": "Listed as Digimon Adventure (1999)",
+    "tom-and-jerry": "Classic MGM shorts are listed as the 1965 Tom and Jerry TV package",
+    "looney-tunes": "Classic theatrical shorts have no series entry, only DVD sets and later shows"
+  }
 }

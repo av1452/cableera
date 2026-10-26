@@ -79,11 +79,16 @@ const norm = (s) =>
 
 // Catalog titles carry disambiguators like "ThunderCats (2011)" or "The Office (US)";
 // search on the bare name and let the year pick the right series.
-const bareTitle = (t) => t.replace(/\s*\([^)]*\)\s*$/, '')
+const bareTitle = (t) =>
+  t
+    .replace(/\s*\([^)]*\)\s*$/, '')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/\u2013|\u2014/g, '-')
 
 function pickMatch(show, results) {
   const wantMovie = show.genres.includes('movie')
-  const types = wantMovie ? ['movie', 'tv_movie', 'tv_special'] : ['tv_series', 'tv_miniseries', 'tv_special']
+  const types = wantMovie ? ['tv_movie', 'tv_special', 'movie'] : ['tv_series', 'tv_miniseries', 'tv_special']
   const candidates = results.filter((r) => types.includes(r.type))
   const title = bareTitle(show.title)
   const sameName = candidates.filter((r) => norm(r.name) === norm(title))
@@ -94,7 +99,9 @@ function pickMatch(show, results) {
 
 const queue = SHOWS.filter((s) => {
   const t = data.titles[s.id]
-  return !t || now - Date.parse(t.checkedAt) > REFRESH_AFTER_MS
+  // A new or changed manual override takes effect on the next run.
+  const overrideChanged = s.id in overrides && t && t.watchmodeId !== overrides[s.id]
+  return !t || overrideChanged || now - Date.parse(t.checkedAt) > REFRESH_AFTER_MS
 }).sort((a, b) => Date.parse(data.titles[a.id]?.checkedAt ?? 0) - Date.parse(data.titles[b.id]?.checkedAt ?? 0))
 
 let refreshed = 0
@@ -105,7 +112,8 @@ try {
     let watchmodeId = show.id in overrides ? overrides[show.id] : prev?.watchmodeId
     let matched = prev?.matched ?? null
     if (watchmodeId === undefined) {
-      const res = await api('/search/', { search_field: 'name', search_value: bareTitle(show.title), types: 'tv,movie' })
+      // No `types` filter: it drops tv_movie/tv_special results; pickMatch filters by type.
+      const res = await api('/search/', { search_field: 'name', search_value: bareTitle(show.title) })
       const hit = pickMatch(show, res.title_results ?? [])
       watchmodeId = hit?.id ?? null
       matched = hit ? { name: hit.name, year: hit.year, type: hit.type } : null
@@ -120,14 +128,11 @@ try {
     const offers = sources
       .filter((s) => (s.region ?? 'US') === 'US' && (s.web_url || s.ios_url || s.android_url))
       .map((s) => ({
-        sourceId: s.source_id,
         name: s.name,
         type: s.type,
         webUrl: s.web_url,
-        iosUrl: s.ios_url,
-        androidUrl: s.android_url,
+        ...(s.web_url ? {} : { iosUrl: s.ios_url, androidUrl: s.android_url }),
         seasons: s.seasons ?? null,
-        episodes: s.episodes ?? null,
       }))
     data.titles[show.id] = { watchmodeId, matched, checkedAt, offers }
     refreshed++
