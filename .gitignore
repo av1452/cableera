@@ -26,3 +26,7 @@ dist-ssr
 # Third-party data fetched at build time (not redistributable; see README)
 src/data/availability.generated.json
 src/data/youtube.generated.json
+
+# Playwright
+test-results/
+playwright-report/
