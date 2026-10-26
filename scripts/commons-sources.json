@@ -1,0 +1,497 @@
+[
+ {
+  "file": "File:Felix Saves the Day (1922).webm",
+  "id": "felix-saves-the-day",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 1,
+  "title": "Felix Saves the Day",
+  "year": 1922
+ },
+ {
+  "file": "File:Felix the Cat - Felix in Hollywood (1923).webm",
+  "id": "felix-in-hollywood",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 2,
+  "title": "Felix in Hollywood",
+  "year": 1923
+ },
+ {
+  "file": "File:Felix the Cat - Felix Minds the Kid (1922).webm",
+  "id": "felix-minds-the-kid",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 3,
+  "title": "Felix Minds the Kid",
+  "year": 1922
+ },
+ {
+  "file": "File:Felix The Cat Felix Lends A Hand ( 1922).webm",
+  "id": "felix-lends-a-hand",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 4,
+  "title": "Felix Lends a Hand",
+  "year": 1922
+ },
+ {
+  "file": "File:Felix The Cat 1922 The Stone Age.webm",
+  "id": "felix-stone-age",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 5,
+  "title": "Felix in the Stone Age",
+  "year": 1922
+ },
+ {
+  "file": "File:1924 FELIX THE CAT CARTOON \" FELIX OUT OF LUCK \".ogv",
+  "id": "felix-out-of-luck",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 6,
+  "title": "Felix Out of Luck",
+  "year": 1924
+ },
+ {
+  "file": "File:Felix the Cat Trifles with Time.webm",
+  "id": "felix-trifles-with-time",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 7,
+  "title": "Felix Trifles with Time",
+  "year": 1925
+ },
+ {
+  "file": "File:Felix the Cat Kept on Walking (1925).webm",
+  "id": "felix-kept-on-walking",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 8,
+  "title": "Felix Kept on Walking",
+  "year": 1925
+ },
+ {
+  "file": "File:Felix The Cat in The Cold Rush (1925).webm",
+  "id": "felix-cold-rush",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 9,
+  "title": "The Cold Rush",
+  "year": 1925
+ },
+ {
+  "file": "File:Felix Gets His Fill (1925).webm",
+  "id": "felix-gets-his-fill",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 10,
+  "title": "Felix Gets His Fill",
+  "year": 1925
+ },
+ {
+  "file": "File:Cartoon - Felix The Cat - (1926) Two-Lip Time.ogv",
+  "id": "felix-two-lip-time",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 11,
+  "title": "Two-Lip Time",
+  "year": 1926
+ },
+ {
+  "file": "File:Felix the Cat in \"Germ Mania\" (1927).ogv",
+  "id": "felix-germ-mania",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 12,
+  "title": "Germ Mania",
+  "year": 1927
+ },
+ {
+  "file": "File:Felix the Cat in Astronomeous (1928).webm",
+  "id": "felix-astronomeous",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 13,
+  "title": "Astronomeous",
+  "year": 1928
+ },
+ {
+  "file": "File:Felix the Cat in \"Japanicky\" (1928).webm",
+  "id": "felix-japanicky",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 14,
+  "title": "Japanicky",
+  "year": 1928
+ },
+ {
+  "file": "File:Felix the Cat in \"Futuritzy\" (1928).ogv",
+  "id": "felix-futuritzy",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 15,
+  "title": "Futuritzy",
+  "year": 1928
+ },
+ {
+  "file": "File:Felix the Cat Eskimotive (1928) with sound.webm",
+  "id": "felix-eskimotive",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 16,
+  "title": "Eskimotive",
+  "year": 1928
+ },
+ {
+  "file": "File:Woos Whoopee (1928).webm",
+  "id": "felix-woos-whoopee",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 17,
+  "title": "Woos Whoopee",
+  "year": 1928
+ },
+ {
+  "file": "File:Felix the Cat in \"Sure-Locked Homes\" (1928).ogv",
+  "id": "felix-sure-locked-homes",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 18,
+  "title": "Sure-Locked Homes",
+  "year": 1928
+ },
+ {
+  "file": "File:Felix the Cat in Romeeow 1930.webm",
+  "id": "felix-romeeow",
+  "showId": "felix-the-cat",
+  "season": 1,
+  "episode": 19,
+  "title": "Romeeow",
+  "year": 1930
+ },
+ {
+  "file": "File:Steamboat Willie (1928) by Walt Disney.webm",
+  "id": "steamboat-willie",
+  "showId": "early-mickey",
+  "season": 1,
+  "episode": 1,
+  "title": "Steamboat Willie",
+  "year": 1928
+ },
+ {
+  "file": "File:Plane Crazy (1929) with sound.webm",
+  "id": "plane-crazy",
+  "showId": "early-mickey",
+  "season": 1,
+  "episode": 2,
+  "title": "Plane Crazy (sound version)",
+  "year": 1929
+ },
+ {
+  "file": "File:The Haunted House (1929).webm",
+  "id": "the-haunted-house",
+  "showId": "early-mickey",
+  "season": 1,
+  "episode": 3,
+  "title": "The Haunted House",
+  "year": 1929
+ },
+ {
+  "file": "File:The Skeleton Dance (1929).webm",
+  "id": "the-skeleton-dance",
+  "showId": "silly-symphonies",
+  "season": 1,
+  "episode": 1,
+  "title": "The Skeleton Dance",
+  "year": 1929
+ },
+ {
+  "file": "File:Dinner Time (1928).webm",
+  "id": "dinner-time",
+  "showId": "aesops-fables",
+  "season": 1,
+  "episode": 1,
+  "title": "Dinner Time",
+  "year": 1928
+ },
+ {
+  "file": "File:Winsor McCay (1914)Gertie the Dinosaur.webm",
+  "id": "gertie-the-dinosaur",
+  "showId": "winsor-mccay",
+  "season": 1,
+  "episode": 1,
+  "title": "Gertie the Dinosaur",
+  "year": 1914
+ },
+ {
+  "file": "File:Winsor McCay (1921) Gertie on Tour.webm",
+  "id": "gertie-on-tour",
+  "showId": "winsor-mccay",
+  "season": 1,
+  "episode": 2,
+  "title": "Gertie on Tour",
+  "year": 1921
+ },
+ {
+  "file": "File:Oswald The Lucky Rabbit in Empty Socks (1927).webm",
+  "id": "oswald-empty-socks",
+  "showId": "oswald",
+  "season": 1,
+  "episode": 1,
+  "title": "Empty Socks",
+  "year": 1927
+ },
+ {
+  "file": "File:Oh Teacher (1927).webm",
+  "id": "oswald-oh-teacher",
+  "showId": "oswald",
+  "season": 1,
+  "episode": 2,
+  "title": "Oh Teacher",
+  "year": 1927
+ },
+ {
+  "file": "File:The Ocean Hop (1927).webm",
+  "id": "oswald-ocean-hop",
+  "showId": "oswald",
+  "season": 1,
+  "episode": 3,
+  "title": "The Ocean Hop",
+  "year": 1927
+ },
+ {
+  "file": "File:The Mechanical Cow (1927).webm",
+  "id": "oswald-mechanical-cow",
+  "showId": "oswald",
+  "season": 1,
+  "episode": 4,
+  "title": "The Mechanical Cow",
+  "year": 1927
+ },
+ {
+  "file": "File:Mars (1930) Oswald The Lucky Rabbit.webm",
+  "id": "oswald-mars",
+  "showId": "oswald",
+  "season": 1,
+  "episode": 5,
+  "title": "Mars",
+  "year": 1930
+ },
+ {
+  "file": "File:\"Birthday\" (1922) Koko The Clown Cartoon (Fleischer Studios).webm",
+  "id": "koko-birthday",
+  "showId": "koko-the-clown",
+  "season": 1,
+  "episode": 1,
+  "title": "Birthday",
+  "year": 1922
+ },
+ {
+  "file": "File:Dave Fleischer - Inkwell Imps, The - Koko's Earth Control (1928).webm",
+  "id": "koko-earth-control",
+  "showId": "koko-the-clown",
+  "season": 1,
+  "episode": 2,
+  "title": "Koko's Earth Control",
+  "year": 1928
+ },
+ {
+  "file": "File:Superman (1941).webm",
+  "id": "superman-mad-scientist",
+  "showId": "fleischer-superman",
+  "season": 1,
+  "episode": 1,
+  "title": "Superman (The Mad Scientist)",
+  "year": 1941
+ },
+ {
+  "file": "File:Billion Dollar Limited (1942).webm",
+  "id": "superman-billion-dollar-limited",
+  "showId": "fleischer-superman",
+  "season": 1,
+  "episode": 2,
+  "title": "Billion Dollar Limited",
+  "year": 1942
+ },
+ {
+  "file": "File:The Arctic Giant (1942).webm",
+  "id": "superman-arctic-giant",
+  "showId": "fleischer-superman",
+  "season": 1,
+  "episode": 3,
+  "title": "The Arctic Giant",
+  "year": 1942
+ },
+ {
+  "file": "File:The Bulleteers.webm",
+  "id": "superman-bulleteers",
+  "showId": "fleischer-superman",
+  "season": 1,
+  "episode": 4,
+  "title": "The Bulleteers",
+  "year": 1942
+ },
+ {
+  "file": "File:The Magnetic Telescope (1942).webm",
+  "id": "superman-magnetic-telescope",
+  "showId": "fleischer-superman",
+  "season": 1,
+  "episode": 5,
+  "title": "The Magnetic Telescope",
+  "year": 1942
+ },
+ {
+  "file": "File:Electric Earthquake (1942).webm",
+  "id": "superman-electric-earthquake",
+  "showId": "fleischer-superman",
+  "season": 1,
+  "episode": 6,
+  "title": "Electric Earthquake",
+  "year": 1942
+ },
+ {
+  "file": "File:Volcano (1942).webm",
+  "id": "superman-volcano",
+  "showId": "fleischer-superman",
+  "season": 1,
+  "episode": 7,
+  "title": "Volcano",
+  "year": 1942
+ },
+ {
+  "file": "File:Terror on the Midway (1942).webm",
+  "id": "superman-terror-on-the-midway",
+  "showId": "fleischer-superman",
+  "season": 1,
+  "episode": 8,
+  "title": "Terror on the Midway",
+  "year": 1942
+ },
+ {
+  "file": "File:Eleventh Hour.webm",
+  "id": "superman-eleventh-hour",
+  "showId": "fleischer-superman",
+  "season": 1,
+  "episode": 9,
+  "title": "Eleventh Hour",
+  "year": 1942
+ },
+ {
+  "file": "File:The Mummy Strikes (1943).webm",
+  "id": "superman-mummy-strikes",
+  "showId": "fleischer-superman",
+  "season": 1,
+  "episode": 10,
+  "title": "The Mummy Strikes",
+  "year": 1943
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 02 Getting Settled.ogv",
+  "id": "beverly-hillbillies-s1e02",
+  "showId": "beverly-hillbillies",
+  "season": 1,
+  "episode": 2,
+  "title": "Getting Settled",
+  "year": 1962
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 05 Jed Buys Stock.ogv",
+  "id": "beverly-hillbillies-s1e05",
+  "showId": "beverly-hillbillies",
+  "season": 1,
+  "episode": 5,
+  "title": "Jed Buys Stock",
+  "year": 1962
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 07 The Servants.ogv",
+  "id": "beverly-hillbillies-s1e07",
+  "showId": "beverly-hillbillies",
+  "season": 1,
+  "episode": 7,
+  "title": "The Servants",
+  "year": 1962
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 10 Pygmalion And Elly.ogv",
+  "id": "beverly-hillbillies-s1e10",
+  "showId": "beverly-hillbillies",
+  "season": 1,
+  "episode": 10,
+  "title": "Pygmalion and Elly",
+  "year": 1962
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 16 Back To Californy.ogv",
+  "id": "beverly-hillbillies-s1e16",
+  "showId": "beverly-hillbillies",
+  "season": 1,
+  "episode": 16,
+  "title": "Back to Californy",
+  "year": 1963
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 17 Jeds Dilemma.ogv",
+  "id": "beverly-hillbillies-s1e17",
+  "showId": "beverly-hillbillies",
+  "season": 1,
+  "episode": 17,
+  "title": "Jed's Dilemma",
+  "year": 1963
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 23 Jed Buys The Freeway.ogv",
+  "id": "beverly-hillbillies-s1e23",
+  "showId": "beverly-hillbillies",
+  "season": 1,
+  "episode": 23,
+  "title": "Jed Buys the Freeway",
+  "year": 1963
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 25 The Family Tree.ogv",
+  "id": "beverly-hillbillies-s1e25",
+  "showId": "beverly-hillbillies",
+  "season": 1,
+  "episode": 25,
+  "title": "The Family Tree",
+  "year": 1963
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 36 Jethros Friend.ogv",
+  "id": "beverly-hillbillies-s1e36",
+  "showId": "beverly-hillbillies",
+  "season": 1,
+  "episode": 36,
+  "title": "Jethro's Friend",
+  "year": 1963
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 39 Grannys Garden.ogv",
+  "id": "beverly-hillbillies-s2e03",
+  "showId": "beverly-hillbillies",
+  "season": 2,
+  "episode": 3,
+  "title": "Granny's Garden",
+  "year": 1963
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 41 The Clampett Look.ogv",
+  "id": "beverly-hillbillies-s2e05",
+  "showId": "beverly-hillbillies",
+  "season": 2,
+  "episode": 5,
+  "title": "The Clampett Look",
+  "year": 1963
+ },
+ {
+  "file": "File:Beverly Hillbillies Episode 43 Chickadee Returns.ogv",
+  "id": "beverly-hillbillies-s2e07",
+  "showId": "beverly-hillbillies",
+  "season": 2,
+  "episode": 7,
+  "title": "Chickadee Returns",
+  "year": 1963
+ }
+]
