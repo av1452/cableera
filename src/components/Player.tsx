@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { useUserData } from '../lib/store'
 import type { MediaSource } from '../types'
+import { YouTubePlayer } from './YouTubePlayer'
 
 type Status = 'loading' | 'ready' | 'waiting' | 'blocked' | 'error'
 
@@ -28,7 +29,7 @@ const ERRORS: Record<number, string> = {
  * shape (4:3 or 16:9) and the video uses object-fit: contain, so footage is
  * pillarboxed or letterboxed and never stretched.
  */
-export function Player({ media, startAt = 0, autoPlay = true, muted = false, preview, onEnded, onProgress, overlay }: Props) {
+function FilePlayer({ media, startAt = 0, autoPlay = true, muted = false, preview, onEnded, onProgress, overlay }: Props) {
   const ref = useRef<HTMLVideoElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
   const { prefs } = useUserData()
@@ -220,4 +221,9 @@ export function Player({ media, startAt = 0, autoPlay = true, muted = false, pre
       {overlay}
     </div>
   )
+}
+
+/** Plays a media record with the right engine: native video or YouTube's embed. */
+export function Player(props: Props) {
+  return props.media.kind === 'youtube' ? <YouTubePlayer {...props} /> : <FilePlayer {...props} />
 }
