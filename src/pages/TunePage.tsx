@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Player } from '../components/Player'
-import { Artwork, AvailabilityBadge, Empty, WhereToWatch } from '../components/ui'
+import { Artwork, AvailabilityBadge, Empty, WatchOptions } from '../components/ui'
 import { CHANNELS, getChannel, getChannelByNumber } from '../data/channels'
 import { availabilityOf, getEpisode, getMedia, getShow } from '../data/catalog'
 import { href, navigate } from '../lib/router'
@@ -123,7 +123,7 @@ export function TunePage({ channelId }: { channelId: string }) {
                 <button className="btn btn-primary" onClick={surf}>
                   Surf to something playable
                 </button>
-                <WhereToWatch show={show} />
+                <WatchOptions show={show} compact />
               </div>
               {upNext && (
                 <p className="fine">

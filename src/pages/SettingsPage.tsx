@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react'
-import { PageHeader } from '../components/ui'
+import { useEffect, type ReactNode } from 'react'
+import { DataCredit, PageHeader, ServicePicker } from '../components/ui'
 import generated from '../data/media.generated.json'
-import { AVAILABILITY_LABEL, allShows, availabilityOf, playableEpisodeCount, playableShowCount } from '../data/catalog'
+import { AVAILABILITY_LABEL, allShows, availabilitySource, availabilityOf, getMedia, playableEpisodeCount, playableShowCount, playableEpisodesFor } from '../data/catalog'
+import { useRoute } from '../lib/router'
 import { actions, useUserData } from '../lib/store'
 import type { Availability, UserPreferences } from '../types'
 
@@ -32,9 +33,9 @@ function Toggle({ name, label, hint }: { name: keyof UserPreferences; label: str
   )
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function Section({ title, id, children }: { title: string; id?: string; children: ReactNode }) {
   return (
-    <section className="settings-section">
+    <section className="settings-section" id={id}>
       <h2>{title}</h2>
       {children}
     </section>
@@ -43,6 +44,12 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 
 export function SettingsPage() {
   const { prefs } = useUserData()
+  const { query } = useRoute()
+  const section = query.get('section')
+  useEffect(() => {
+    if (section) document.getElementById(section)?.scrollIntoView({ block: 'start' })
+  }, [section])
+  const youtube = allShows().flatMap((s) => playableEpisodesFor(s.id).map((e) => getMedia(e.mediaId)!).filter((m) => m.kind === 'youtube'))
   const counts = allShows().reduce<Record<string, number>>((m, s) => {
     const a = availabilityOf(s)
     m[a] = (m[a] ?? 0) + 1
@@ -52,6 +59,17 @@ export function SettingsPage() {
   return (
     <div className="page settings">
       <PageHeader title="Settings" />
+
+      <Section title="My streaming services" id="services">
+        <p className="muted">
+          Pick the services you have. CableEra puts their “Watch on…” buttons first and marks their shows in the guide.
+          Stored on this device only.
+        </p>
+        <ServicePicker />
+        {!availabilitySource && (
+          <p className="fine">Streaming availability hasn’t been loaded in this build yet, so no shows are matched to services.</p>
+        )}
+      </Section>
 
       <Section title="Appearance">
         <Radio name="theme" value={prefs.theme} options={[['classic', 'Classic blue'], ['midnight', 'Midnight'], ['contrast', 'High contrast']]} />
@@ -88,9 +106,11 @@ export function SettingsPage() {
 
       <Section title="Content availability">
         <p>
-          {playableEpisodeCount()} episodes across {playableShowCount()} series play inside CableEra. Each is a
-          public-domain film whose file, license tag and URL were checked on Wikimedia Commons. Everything else in the
-          catalog is a listing: CableEra shows metadata and never hosts or embeds copyrighted shows.
+          {playableEpisodeCount()} episodes across {playableShowCount()} series play inside CableEra. Most are
+          public-domain films whose file, license tag and URL were checked on Wikimedia Commons.{' '}
+          {youtube.length > 0 &&
+            `${youtube.length} are official uploads from rights holders’ verified YouTube channels, played with YouTube’s embedded player. `}
+          CableEra never hosts copyrighted shows or embeds unofficial uploads.
         </p>
         <ul className="plain availability-legend">
           {(Object.keys(AVAILABILITY_LABEL) as Availability[]).map((a) => (
@@ -104,8 +124,8 @@ export function SettingsPage() {
           ))}
         </ul>
         <p className="fine">
-          “Find where to watch” opens an unverified JustWatch search. A provider is only listed as a source once it has
-          been confirmed.
+          “Watch on…” links come from a streaming-availability check, dated on each show and refreshed at least every 30
+          days. <DataCredit /> Without a checked link, “Find where to watch” opens an unverified JustWatch search.
         </p>
       </Section>
 
@@ -131,6 +151,21 @@ export function SettingsPage() {
             ))}
           </ul>
         </details>
+        {youtube.length > 0 && (
+          <details>
+            <summary>Official YouTube uploads ({youtube.length})</summary>
+            <ul className="plain credits">
+              {youtube.map((m) => (
+                <li key={m.id}>
+                  <a href={m.sourcePage} target="_blank" rel="noopener noreferrer">
+                    {m.youtubeId}
+                  </a>{' '}
+                  <span className="muted">{m.attribution}</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
       </Section>
     </div>
   )

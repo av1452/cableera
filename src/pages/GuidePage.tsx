@@ -2,14 +2,15 @@ import { useEffect, useMemo, useState } from 'react'
 import { Guide } from '../components/Guide'
 import { Player } from '../components/Player'
 import { ProgramDetails } from '../components/ProgramDetails'
-import { Artwork, Chip } from '../components/ui'
+import { Artwork, Chip, DataCredit } from '../components/ui'
 import { CHANNELS, getChannel } from '../data/channels'
-import { ERAS, getEpisode, getMedia, getShow, playableEpisodesFor } from '../data/catalog'
+import { ERAS, availabilitySource, getEpisode, getMedia, getShow, playableEpisodesFor } from '../data/catalog'
+import { onMyServices } from '../data/providers'
 import { navigate, useRoute } from '../lib/router'
 import { entryAt, itemAt, startOfDay } from '../lib/schedule'
 import { useUserData } from '../lib/store'
 import { fmtDay, fmtTime, useNow } from '../lib/time'
-import type { Era, Genre, ScheduleEntry } from '../types'
+import type { Era, Genre, ScheduleEntry, Show } from '../types'
 
 const HOUR = 3_600_000
 const JUMPS: { label: string; hour: number }[] = [
@@ -32,6 +33,7 @@ export function GuidePage() {
   const [genre, setGenre] = useState<Genre | ''>('')
   const [playableOnly, setPlayableOnly] = useState(false)
   const [favOnly, setFavOnly] = useState(false)
+  const [watchable, setWatchable] = useState(false)
   const [scrollTo, setScrollTo] = useState({ t: now, n: 0 })
 
   const channels = useMemo(
@@ -56,8 +58,11 @@ export function GuidePage() {
   const previewEntry = settledId === selected.id ? selected : null
 
   const matches =
-    era || genre
-      ? (show: { era: Era; genres: Genre[] }) => (!era || show.era === era) && (!genre || show.genres.includes(genre))
+    era || genre || watchable
+      ? (show: Show) =>
+          (!era || show.era === era) &&
+          (!genre || show.genres.includes(genre)) &&
+          (!watchable || playableEpisodesFor(show.id).length > 0 || onMyServices(show, prefs.services))
       : undefined
 
   const activate = (e: ScheduleEntry) => {
@@ -150,6 +155,11 @@ export function GuidePage() {
           <Chip on={playableOnly} onClick={() => setPlayableOnly(!playableOnly)}>
             ▶ Playable channels
           </Chip>
+          {prefs.services.length > 0 && (
+            <Chip on={watchable} onClick={() => setWatchable(!watchable)}>
+              ✓ Watchable for me
+            </Chip>
+          )}
           <Chip on={favOnly} onClick={() => setFavOnly(!favOnly)}>
             ★ Favorites
           </Chip>
@@ -174,7 +184,18 @@ export function GuidePage() {
       <p className="fine guide-note">
         Simulated schedule, not a live broadcast. CableEra channels are fictional and not affiliated with any network.
         <span className="legend">
-          <span className="cell-play">▶</span> plays in CableEra · <span className="cell-tag">Listing</span> guide listing only
+          <span className="cell-play">▶</span> plays in CableEra
+          {prefs.services.length > 0 && availabilitySource && (
+            <>
+              {' '}· <span className="provider-tag">D+</span> on your service
+            </>
+          )}{' '}
+          · <span className="cell-tag">Listing</span> guide listing only
+          {availabilitySource && (
+            <>
+              {' '}· <DataCredit />
+            </>
+          )}
         </span>
       </p>
     </div>

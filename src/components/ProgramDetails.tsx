@@ -3,7 +3,7 @@ import { href } from '../lib/router'
 import { itemAt } from '../lib/schedule'
 import { fmtRuntime, fmtTime } from '../lib/time'
 import type { Channel, ScheduleEntry } from '../types'
-import { AvailabilityBadge, FavoriteButton, WhereToWatch } from './ui'
+import { AvailabilityBadge, FavoriteButton, WatchOptions } from './ui'
 
 /** Selected-program info: the right half of the guide's info strip. */
 export function ProgramDetails({ entry, channel, now }: { entry: ScheduleEntry; channel: Channel; now: number }) {
@@ -70,7 +70,7 @@ export function ProgramDetails({ entry, channel, now }: { entry: ScheduleEntry; 
         {!entry.playable && (
           <>
             <AvailabilityBadge availability={availabilityOf(show)} />
-            <WhereToWatch show={show} />
+            <WatchOptions show={show} compact />
           </>
         )}
         <a className="btn btn-ghost" href={href(`/show/${show.id}`)}>
@@ -79,7 +79,11 @@ export function ProgramDetails({ entry, channel, now }: { entry: ScheduleEntry; 
         <FavoriteButton showId={show.id} small />
       </div>
       {!entry.playable && (
-        <p className="fine">This program is a guide listing only. CableEra doesn’t stream it.</p>
+        <p className="fine">
+          {show.providerLinks.length
+            ? 'This program doesn’t play in CableEra. Watch it on a streaming service instead.'
+            : 'This program is a guide listing only. CableEra doesn’t stream it.'}
+        </p>
       )}
     </div>
   )

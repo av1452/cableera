@@ -1,7 +1,8 @@
 import type { CSSProperties } from 'react'
-import { Artwork, AvailabilityBadge, Shelf, ShowTile } from '../components/ui'
+import { Artwork, AvailabilityBadge, DataCredit, Shelf, ShowTile } from '../components/ui'
 import { CHANNELS, COLLECTIONS, getChannel } from '../data/channels'
-import { ERAS, allShows, availabilityOf, getEpisode, getShow } from '../data/catalog'
+import { ERAS, allShows, availabilitySource, availabilityOf, getEpisode, getShow } from '../data/catalog'
+import { onMyServices } from '../data/providers'
 import { href } from '../lib/router'
 import { entryAt, itemAt } from '../lib/schedule'
 import { useUserData } from '../lib/store'
@@ -152,6 +153,25 @@ export function HomePage() {
           })}
         </div>
       </section>
+
+      {availabilitySource &&
+        (prefs.services.length ? (
+          (() => {
+            const mine = allShows().filter((s) => availabilityOf(s) !== 'playable' && onMyServices(s, prefs.services))
+            return mine.length ? (
+              <Shelf title="On your services" action={<DataCredit />}>
+                {mine.map((s) => (
+                  <ShowTile key={s.id} show={s} />
+                ))}
+              </Shelf>
+            ) : null
+          })()
+        ) : (
+          <a className="services-prompt" href={href('/settings?section=services')}>
+            <strong>Have Disney+, Paramount+ or Max?</strong>
+            <span>Tell CableEra your streaming services and it’ll show where your favorites are streaming.</span>
+          </a>
+        ))}
 
       <Shelf title="Programming blocks" action={<a href={href('/discover')}>Discover →</a>}>
         {[block, ...COLLECTIONS.filter((c) => c.kind === 'mode' && c.id !== block.id)].map((c, i) => (

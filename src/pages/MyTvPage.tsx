@@ -1,4 +1,4 @@
-import { Artwork, Chip, Empty, PageHeader, Shelf, ShowTile } from '../components/ui'
+import { Artwork, Chip, Empty, PageHeader, ServicePicker, Shelf, ShowTile } from '../components/ui'
 import { getChannel } from '../data/channels'
 import { ERAS, getEpisode, getShow } from '../data/catalog'
 import { href } from '../lib/router'
@@ -85,6 +85,12 @@ export function MyTvPage() {
             )}
           </div>
         </div>
+      </section>
+
+      <section className="shelf">
+        <h2>My streaming services</h2>
+        <p className="muted">Shows on these services get a “Watch on…” button and a badge in the guide.</p>
+        <ServicePicker />
       </section>
 
       <section className="shelf">

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Chip, Empty, PageHeader, ShowTile } from '../components/ui'
-import { ERAS, availabilityOf, playableEpisodeCount, searchShows } from '../data/catalog'
+import { Chip, DataCredit, Empty, PageHeader, ShowTile } from '../components/ui'
+import { ERAS, availabilitySource, availabilityOf, playableEpisodeCount, searchShows } from '../data/catalog'
+import { onMyServices } from '../data/providers'
 import { useRoute } from '../lib/router'
 import { useUserData } from '../lib/store'
 import type { Era, Genre } from '../types'
@@ -10,13 +11,13 @@ type Sort = 'title' | 'year-asc' | 'year-desc' | 'recent'
 
 export function LibraryPage() {
   const { query } = useRoute()
-  const { history, favoriteShows } = useUserData()
+  const { history, favoriteShows, prefs } = useUserData()
   const [q, setQ] = useState('')
   const [eras, setEras] = useState<Era[]>(() => (query.get('era') ? [query.get('era') as Era] : []))
   const [genre, setGenre] = useState<Genre | ''>('')
   const [network, setNetwork] = useState('')
   const [year, setYear] = useState('')
-  const [source, setSource] = useState<'all' | 'playable' | 'listing' | 'favorites'>('all')
+  const [source, setSource] = useState<'all' | 'playable' | 'mine' | 'free' | 'streaming' | 'listing' | 'favorites'>('all')
   const [sort, setSort] = useState<Sort>('title')
 
   const base = useMemo(() => searchShows(q), [q])
@@ -37,7 +38,10 @@ export function LibraryPage() {
     .filter((s) => !year || (s.startYear <= Number(year) && (s.endYear ?? 2026) >= Number(year)))
     .filter((s) => {
       if (source === 'playable') return availabilityOf(s) === 'playable'
-      if (source === 'listing') return availabilityOf(s) !== 'playable'
+      if (source === 'mine') return onMyServices(s, prefs.services)
+      if (source === 'free') return s.providerLinks.some((l) => l.verified && l.type === 'free')
+      if (source === 'streaming') return s.providerLinks.some((l) => l.verified && (l.type === 'sub' || l.type === 'free'))
+      if (source === 'listing') return availabilityOf(s) === 'unavailable'
       if (source === 'favorites') return favoriteShows.includes(s.id)
       return true
     })
@@ -87,6 +91,13 @@ export function LibraryPage() {
             [
               ['all', 'Everything'],
               ['playable', '▶ Plays in CableEra'],
+              ...(availabilitySource
+                ? ([
+                    ['mine', '✓ On my services'],
+                    ['streaming', 'Streaming anywhere'],
+                    ['free', 'Free to stream'],
+                  ] as const)
+                : []),
               ['listing', 'Listing only'],
               ['favorites', '★ Favorites'],
             ] as const
@@ -142,6 +153,16 @@ export function LibraryPage() {
           </label>
         </div>
       </div>
+      {source === 'mine' && !prefs.services.length && (
+        <p className="fine">
+          You haven’t picked any services yet. <a href="#/settings?section=services">Choose your services</a>.
+        </p>
+      )}
+      {availabilitySource && (source === 'mine' || source === 'free' || source === 'streaming') && (
+        <p className="fine">
+          <DataCredit />
+        </p>
+      )}
       {results.length ? (
         <div className="tile-grid">
           {results.map((s) => (

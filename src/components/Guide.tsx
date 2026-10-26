@@ -1,5 +1,6 @@
 import { useLayoutEffect, useMemo, useRef, useSyncExternalStore, type CSSProperties, type KeyboardEvent } from 'react'
 import { getShow } from '../data/catalog'
+import { ProviderTag } from './ui'
 import { entriesBetween } from '../lib/schedule'
 import { actions, useUserData } from '../lib/store'
 import { fmtTime } from '../lib/time'
@@ -135,12 +136,16 @@ export function Guide({ channels, windowStart, windowEnd, now, selectedId, onSel
                     const live = e.start <= now && e.end > now
                     const past = e.end <= now
                     const selected = e.id === selectedId
+                    // Not playable here, but on one of the viewer's services.
+                    const mine = e.playable
+                      ? undefined
+                      : show.providerLinks.find((l) => l.verified && (l.type === 'sub' || l.type === 'free') && prefs.services.includes(l.providerId))
                     const dim = matches && !matches(show)
                     const label = [
                       show.title,
                       `${fmtTime(e.start)} to ${fmtTime(e.end)}`,
                       live ? 'on now' : past ? 'already aired' : '',
-                      e.playable ? 'plays in CableEra' : 'listing only, not playable',
+                      e.playable ? 'plays in CableEra' : mine ? `not playable here, on ${mine.providerName} (your service)` : 'listing only, not playable',
                     ]
                       .filter(Boolean)
                       .join(', ')
@@ -158,6 +163,7 @@ export function Guide({ channels, windowStart, windowEnd, now, selectedId, onSel
                           past && 'is-past',
                           selected && 'is-selected',
                           e.playable ? 'is-playable' : 'is-listing',
+                          mine && 'is-mine',
                           dim && 'is-dim',
                         ]
                           .filter(Boolean)
@@ -185,7 +191,13 @@ export function Guide({ channels, windowStart, windowEnd, now, selectedId, onSel
                           {show.title}
                         </span>
                         <span className="cell-meta">
-                          {e.playable ? <span className="cell-play" aria-hidden="true">▶</span> : <span className="cell-tag">Listing</span>}
+                          {e.playable ? (
+                            <span className="cell-play" aria-hidden="true">▶</span>
+                          ) : mine ? (
+                            <ProviderTag link={mine} />
+                          ) : (
+                            <span className="cell-tag">Listing</span>
+                          )}
                           {watchedShows.has(show.id) && <span className="cell-dot" title="Recently watched" />}
                           {fmtTime(e.start)}
                         </span>

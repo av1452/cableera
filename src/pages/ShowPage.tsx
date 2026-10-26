@@ -1,6 +1,6 @@
-import { Artwork, AvailabilityBadge, Empty, FavoriteButton, WhereToWatch } from '../components/ui'
+import { Artwork, AvailabilityBadge, Empty, FavoriteButton, WatchOptions } from '../components/ui'
 import { CHANNELS } from '../data/channels'
-import { availabilityOf, episodesFor, eraLabel, getShow } from '../data/catalog'
+import { availabilityOf, episodesFor, eraLabel, getMedia, getShow } from '../data/catalog'
 import { href } from '../lib/router'
 import { entriesBetween } from '../lib/schedule'
 import { actions, useUserData } from '../lib/store'
@@ -11,6 +11,7 @@ const RIGHTS_LABEL = {
   'public-domain-not-renewed': 'Public domain (US): copyright not renewed',
   copyrighted: 'Copyrighted',
   licensed: 'Licensed to CableEra',
+  'official-embed': 'Official upload, embedded',
 } as const
 
 export function ShowPage({ showId }: { showId: string }) {
@@ -29,6 +30,7 @@ export function ShowPage({ showId }: { showId: string }) {
   const playable = eps.filter((e) => e.mediaId)
   const resume = playable.find((e) => progress[e.id] && !progress[e.id].completed) ?? playable.find((e) => !progress[e.id]?.completed) ?? playable[0]
   const saved = savedShows.includes(show.id)
+  const officialChannel = playable.map((e) => getMedia(e.mediaId)?.channel).find(Boolean)
 
   // Upcoming airings across all channels in the next 24 hours.
   const airings = CHANNELS.filter((c) => c.showIds.includes(show.id))
@@ -58,15 +60,30 @@ export function ShowPage({ showId }: { showId: string }) {
                 ▶ {progress[resume.id] ? 'Resume' : 'Play'} “{resume.title}”
               </a>
             )}
-            {availability !== 'playable' && <WhereToWatch show={show} />}
             <FavoriteButton showId={show.id} />
             <button className={`btn btn-ghost ${saved ? 'is-on' : ''}`} aria-pressed={saved} onClick={() => actions.toggleSavedShow(show.id)}>
               {saved ? '✓ Saved' : '+ Save'}
             </button>
           </div>
+          {(availability !== 'playable' || show.providerLinks.length > 0) && (
+            <div className="where-to-watch">
+              <h2 className="h3">Where to watch</h2>
+              <WatchOptions show={show} />
+            </div>
+          )}
           <div className="rights-box">
             <strong>{RIGHTS_LABEL[show.rights.status]}</strong>
             <p>{show.rights.basis}</p>
+            {officialChannel && (
+              <p>
+                {playable.length === 1 ? 'One episode plays in CableEra as an official upload' : `${playable.length} episodes play in CableEra as official uploads`}{' '}
+                from{' '}
+                <a href={officialChannel.url} target="_blank" rel="noopener noreferrer">
+                  {officialChannel.name}
+                </a>
+                , using YouTube’s embedded player.
+              </p>
+            )}
             {availability === 'unavailable' && (
               <p className="fine">
                 No viewing source has been verified for this title. CableEra shows its metadata only, and never claims a
@@ -75,7 +92,7 @@ export function ShowPage({ showId }: { showId: string }) {
             )}
             {show.artwork && (
               <p className="fine">
-                Artwork: frame from the film, {show.artwork.credit}.{' '}
+                Artwork: {show.artwork.credit}.{' '}
                 <a href={show.artwork.sourcePage} target="_blank" rel="noopener noreferrer">
                   Source ↗
                 </a>
