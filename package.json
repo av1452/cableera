@@ -8,7 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "media:refresh": "node scripts/fetch-commons-media.mjs"
+    "media:refresh": "node scripts/fetch-commons-media.mjs",
+    "data:availability": "node scripts/fetch-availability.mjs",
+    "data:youtube": "node scripts/fetch-youtube-media.mjs",
+    "data:refresh": "npm run data:availability && npm run data:youtube"
   },
   "dependencies": {
     "react": "^19.3.1",
@@ -22,5 +25,8 @@
     "oxlint": "^1.88.0",
     "typescript": "~6.0.3",
     "vite": "^8.3.4"
+  },
+  "engines": {
+    "node": ">=22.18"
   }
 }

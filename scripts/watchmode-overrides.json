@@ -1,0 +1,10 @@
+{
+  "_comment": "Manual Watchmode title ids for shows the automatic name+year match gets wrong. Use null to mark a show as not on Watchmode. Keys are CableEra show ids.",
+  "felix-the-cat": null,
+  "early-mickey": null,
+  "silly-symphonies": null,
+  "aesops-fables": null,
+  "winsor-mccay": null,
+  "oswald": null,
+  "koko-the-clown": null
+}
