@@ -3,6 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    # Weekly rebuild keeps streaming links and YouTube checks fresh (well inside
+    # the 30-day limit on cached third-party data).
+    - cron: '17 9 * * 1'
   workflow_dispatch:
 
 permissions:
@@ -21,10 +25,39 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - run: npm ci
       - run: npm run lint
+
+      # Third-party data is fetched here and bundled into the site, never
+      # committed. The cache carries it between runs so each run only spends
+      # API quota on shows that are due for a re-check.
+      - name: Restore streaming data
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            src/data/availability.generated.json
+            src/data/youtube.generated.json
+          key: streaming-data-${{ github.run_id }}
+          restore-keys: streaming-data-
+      - name: Refresh streaming availability (Watchmode)
+        run: npm run data:availability
+        env:
+          WATCHMODE_API_KEY: ${{ secrets.WATCHMODE_API_KEY }}
+          WATCHMODE_MAX_REQUESTS: ${{ github.event_name == 'push' && '40' || '300' }}
+      - name: Verify official YouTube uploads
+        run: npm run data:youtube
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      - name: Save streaming data
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            src/data/availability.generated.json
+            src/data/youtube.generated.json
+          key: streaming-data-${{ github.run_id }}
+
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
