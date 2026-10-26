@@ -1,0 +1,31 @@
+name: Suggest a show
+description: Add a show to the catalog or a channel lineup
+labels: [catalog]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Show title
+      placeholder: Rocket Power
+    validations:
+      required: true
+  - type: input
+    id: years
+    attributes:
+      label: Years it aired
+      placeholder: 1999–2004
+  - type: input
+    id: network
+    attributes:
+      label: Original network
+      placeholder: Nickelodeon
+  - type: dropdown
+    id: era
+    attributes:
+      label: Era
+      options: [Early 2010s, Late 2000s, Early 2000s, 1990s, Classic TV & Vintage]
+  - type: textarea
+    id: why
+    attributes:
+      label: Anything else?
+      description: Channel it belongs on, or a legitimate free source (public-domain archive, official YouTube channel) if you know one.

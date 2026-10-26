@@ -1,0 +1,32 @@
+name: Report a wrong streaming link
+description: A "Watch on…" button opens the wrong show, or the show isn't there anymore
+labels: [availability]
+body:
+  - type: input
+    id: show
+    attributes:
+      label: Show
+      placeholder: Hey Arnold!
+    validations:
+      required: true
+  - type: input
+    id: service
+    attributes:
+      label: Service
+      placeholder: Paramount+
+  - type: dropdown
+    id: problem
+    attributes:
+      label: What's wrong?
+      options:
+        - Opens a different show
+        - The show isn't on this service anymore
+        - The link is broken
+        - The show is on a service CableEra doesn't list
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details

@@ -1,0 +1,21 @@
+name: Bug report
+description: Something doesn't work or looks broken
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead. Screenshots help.
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      placeholder: iPhone 16 Pro, Safari / Windows, Chrome 141
+  - type: input
+    id: page
+    attributes:
+      label: Page or link
+      placeholder: https://av1452.github.io/cableera/#/guide
