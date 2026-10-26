@@ -82,6 +82,8 @@ export function YouTubePlayer({ media, startAt = 0, autoPlay = true, muted = fal
   const host = useRef<HTMLDivElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
   const player = useRef<YTPlayer | null>(null)
+  // The player object exists before its methods do; they're usable only after onReady.
+  const ready = useRef(false)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [error, setError] = useState('')
   const [attempt, setAttempt] = useState(0)
@@ -97,7 +99,7 @@ export function YouTubePlayer({ media, startAt = 0, autoPlay = true, muted = fal
     let timer: number | undefined
     const report = () => {
       const p = player.current
-      if (!p || preview) return
+      if (!p || !ready.current || preview) return
       const d = p.getDuration()
       if (d > 0) cbs.current.onProgress?.(p.getCurrentTime(), d)
     }
@@ -121,6 +123,7 @@ export function YouTubePlayer({ media, startAt = 0, autoPlay = true, muted = fal
           },
           events: {
             onReady: () => {
+              ready.current = true
               setStatus('ready')
               if (autoPlay) player.current?.playVideo()
             },
@@ -147,7 +150,8 @@ export function YouTubePlayer({ media, startAt = 0, autoPlay = true, muted = fal
       cancelled = true
       clearInterval(timer)
       report()
-      player.current?.destroy()
+      if (ready.current) player.current?.destroy()
+      ready.current = false
       player.current = null
     }
   }, [media.youtubeId, autoPlay, muted, preview, attempt])
@@ -157,7 +161,7 @@ export function YouTubePlayer({ media, startAt = 0, autoPlay = true, muted = fal
     const onKey = (e: KeyboardEvent) => {
       const p = player.current
       const t = e.target as HTMLElement
-      if (!p || e.metaKey || e.ctrlKey || e.altKey || t.closest('input, textarea, select, dialog')) return
+      if (!p || !ready.current || e.metaKey || e.ctrlKey || e.altKey || t.closest('input, textarea, select, dialog')) return
       if (e.key === ' ' || e.key === 'k') {
         e.preventDefault()
         if (p.getPlayerState() === 1) p.pauseVideo()
