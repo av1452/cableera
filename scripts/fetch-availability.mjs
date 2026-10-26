@@ -30,6 +30,19 @@ if (!KEY) {
   process.exit(0)
 }
 
+// Validate the key and report quota up front, even when no show is due for a
+// re-check (the status endpoint doesn't consume quota).
+{
+  const res = await fetch(`${BASE}/status/`, { headers: { 'X-API-Key': KEY, Accept: 'application/json' } }).catch(() => null)
+  if (res?.ok) {
+    const st = await res.json()
+    console.log(`Watchmode key OK: ${st.quotaUsed}/${st.quota} requests used this month.`)
+  } else {
+    console.log(`::warning title=Watchmode key check failed::HTTP ${res?.status ?? 'network error'}. Availability will not refresh; check the WATCHMODE_API_KEY secret.`)
+    process.exit(0)
+  }
+}
+
 const { SHOWS } = await import('../src/data/shows.ts')
 const overrides = JSON.parse(await readFile(OVERRIDES, 'utf8'))
 const now = Date.now()
