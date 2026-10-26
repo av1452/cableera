@@ -48,12 +48,37 @@ Each show resolves to one of these (see `availabilityOf` in `src/data/catalog.ts
 
 | Category | Meaning | Count today |
 |---|---|---|
-| Plays in CableEra | At least one episode has a verified media record | 9 series / 55 episodes |
-| Free on provider / Subscription | A provider link someone has **confirmed** | 0 (none verified yet) |
+| Plays in CableEra | At least one episode has a verified media record (public-domain file or official YouTube upload) | 10 series / 56 episodes |
+| Free to stream / On streaming | A checked, dated link to a service carrying the show (see below) | Depends on the availability job |
 | Public-domain archive | Rights checked, viewable only at the archive | 0 |
-| Listing only | Metadata only, with no verified source | ~140 |
+| Listing only | Metadata only, with no verified source | The rest |
 
-Listing-only shows never get a Play button. "Find where to watch" opens a JustWatch search, and a dialog first explains that CableEra hasn't verified availability. To add a verified provider, put a `ProviderLink` with `verified: true` and a `lastChecked` date on the show.
+Listing-only shows never get a Play button. Without a checked link, "Find where to watch" opens a JustWatch search, and a dialog first explains that CableEra hasn't verified availability.
+
+### Streaming links and "My services"
+
+Shows that don't play in CableEra get **Watch on Paramount+**-style buttons that open the exact show on the service (on phones, usually in the service's app). They come from the [Watchmode API](https://api.watchmode.com/):
+
+- `scripts/fetch-availability.mjs` looks each show up by name and year (`scripts/watchmode-overrides.json` fixes wrong matches), then fetches its US sources: subscription, free, buy/rent.
+- Viewers pick their services in **Settings → My streaming services** (or My TV). Their services' buttons come first and turn primary, guide cells show a service badge (e.g. `P+`), the guide gets a **Watchable for me** filter, the Library gets **On my services / Streaming anywhere / Free to stream** filters, and Home gets an **On your services** row.
+- Every link shows the date it was checked plus "Streaming data from Watchmode" (the free plan requires attribution), and a dialog explains what's needed (subscription, free with ads, purchase) before CableEra opens the service.
+
+**Data handling:** Watchmode's terms don't allow sharing its data with third parties, and cap free-plan caching at 30 days. So `src/data/availability.generated.json` is gitignored and never committed. The deploy workflow fetches it with a secret, keeps it between runs in the Actions cache, and bundles it into the site. Entries older than 30 days are dropped by the script and ignored by the app. A run spends its request budget on never-checked shows first, then the stalest (default 300 requests on the weekly scheduled run, 40 on push deploys). A first full run costs about two requests per show; after that, about one per show per week.
+
+**Setup:** create a free key at [api.watchmode.com](https://api.watchmode.com/), then add it as the repository secret `WATCHMODE_API_KEY` (Settings → Secrets and variables → Actions) and run the "Deploy to GitHub Pages" workflow. Locally: `WATCHMODE_API_KEY=... npm run data:availability`. Without a key, everything still works and shows fall back to the JustWatch search.
+
+### Official YouTube uploads
+
+Some rights holders post full episodes on their own YouTube channels. CableEra plays those through YouTube's embedded player (privacy-enhanced `youtube-nocookie.com` mode), the embedding method YouTube's terms allow, so they work in the guide, live tuning, marathons and on-demand like any other episode.
+
+Safeguards, in `scripts/fetch-youtube-media.mjs`:
+
+- **Allowlist only:** `scripts/youtube-channels.json` lists verified official channels, with how each was confirmed. Uploads from any other channel are rejected, so fan re-uploads can never get in. Today it has one channel: The Official Pokémon YouTube channel (`@pokemon`).
+- **Checked every build:** each video goes through YouTube's oEmbed endpoint, which fails for removed, private or embed-disabled videos and reports the uploader. Failures are dropped.
+- **Discovery (optional):** with a free YouTube Data API key in the `YOUTUBE_API_KEY` secret, the script lists each allowlisted channel's uploads, matches full-episode titles to shows with the channel's rules, and checks duration, embeddability and US region blocks. Without a key it checks only the hand-curated `scripts/youtube-sources.json` (currently Pokémon episode 1), where durations are entered by hand.
+- Like the Watchmode data, `src/data/youtube.generated.json` is regenerated before each build and not committed.
+
+To add a channel, confirm it's the studio's or network's own verified channel, add it with a title rule to `youtube-channels.json`, and note how you confirmed it.
 
 ### Playable media
 
@@ -71,6 +96,7 @@ Current playable series:
 | Felix the Cat (1922–1930), Gertie (1914/1921), Koko the Clown (1922/1928), Oswald (1927–1930), Mickey Mouse 1928–29 incl. *Steamboat Willie*, *The Skeleton Dance*, Aesop's Fables *Dinner Time* | Published 1930 or earlier, so the copyright term has expired |
 | Fleischer *Superman* (1941–43) | Copyright not renewed, per Wikimedia Commons |
 | *The Beverly Hillbillies*, 12 early episodes | Copyright not renewed, per Wikimedia Commons (not every episode of the series) |
+| *Pokémon* (official YouTube uploads) | Copyrighted; embedded from the rights holder's official channel, never hosted |
 
 Character names such as Mickey, Felix and Superman can still be trademarks. CableEra uses no studio logos.
 
@@ -87,35 +113,36 @@ src/
   types.ts                  Show, Episode, MediaSource, ContentRights, Channel, ScheduleEntry, ...
   data/
     shows.ts                Editorial catalog metadata (no media)
-    media.generated.json    Verified media records (generated, don't hand-edit)
-    catalog.ts              Joins shows with media; availability; search
-    providers.ts            Provider adapter layer (external destinations)
+    media.generated.json    Verified Commons media records (generated, don't hand-edit)
+    *.generated.json        Availability + YouTube data (built in CI, gitignored)
+    catalog.ts              Joins shows with media and streaming links; availability; search
+    providers.ts            Provider registry, offer grouping, "my services" matching
     channels.ts             Channel identities + editorial collections
   lib/
     schedule.ts             Simulated linear schedule generation
     store.ts                User data behind a UserDataBackend (localStorage today)
     surf.ts                 Channel surf / channel up-down
     router.ts               Hash router (static-host friendly)
-  components/               Guide grid, ProgramDetails, Player, shared UI
+  components/               Guide grid, ProgramDetails, Player + YouTubePlayer, shared UI
   pages/                    One file per route
 public/                     Manifest, service worker, icons
-scripts/                    Media verification pipeline
+scripts/                    Commons, Watchmode and YouTube data pipelines
 ```
 
 These concerns are kept separate: catalog metadata, media/rights, scheduling, playback, UI and user data. Schedules reference catalog IDs and never copy episode data. An `Episode` can exist without a `mediaId`. To add account sync, implement `UserDataBackend` (`load`/`save`) in `src/lib/store.ts`.
 
 ### Player
 
-The player uses native `<video>` with `preload="metadata"` and streams through range requests, never downloading whole files. The frame is 4:3 or 16:9 to match the source, and the video uses `object-fit: contain`, so footage is pillarboxed and never stretched. The player checks codec support up front, offers retry on network errors, shows "Tap to play" when the browser blocks autoplay, saves progress every 5 seconds and on pause or exit, and resumes after 10 seconds or more of viewing.
+The player uses native `<video>` with `preload="metadata"` and streams through range requests, never downloading whole files. The frame is 4:3 or 16:9 to match the source, and the video uses `object-fit: contain`, so footage is pillarboxed and never stretched. The player checks codec support up front, offers retry on network errors, shows "Tap to play" when the browser blocks autoplay, saves progress every 5 seconds and on pause or exit, and resumes after 10 seconds or more of viewing. Official YouTube uploads use a separate `YouTubePlayer` (YouTube IFrame API) with the same props, so every page plays either kind.
 
 ## Hosting
 
 The build is fully static, with a relative `base` and hash routing, so it runs from any path:
 
-- **GitHub Pages:** push to `main` with Pages set to "GitHub Actions". `.github/workflows/pages.yml` lints, builds and deploys.
+- **GitHub Pages:** push to `main` with Pages set to "GitHub Actions". `.github/workflows/pages.yml` lints, refreshes streaming data, builds and deploys. It also runs weekly (Mondays) to keep links fresh.
 - Any static host (Netlify, Vercel, S3) also works: serve `dist/`.
 
-The service worker (production only) caches the app shell for offline guide access. It never caches video. No API keys are used. If you add a metadata API later, keep its keys server-side and don't ship them in `VITE_*` variables.
+The service worker (production only) caches the app shell for offline guide access. It never caches video. API keys (`WATCHMODE_API_KEY`, `YOUTUBE_API_KEY`) live only in GitHub Actions secrets and are used at build time. Never ship them in `VITE_*` variables.
 
 ## Testing status
 
@@ -126,13 +153,16 @@ Tested on 2026-10-25 against the production build with Playwright (Chromium and 
 - **iPhone size, WebKit (393×852):** no overflow on Home, Library or Show pages. The Guide overflowed and was fixed afterwards. WebKit reports WebM as playable, and the player loaded.
 - **Blocked autoplay:** falls back to "Tap to play".
 
+- **Streaming features (2026-10-25):** against a mock Watchmode API built from its OpenAPI spec: name+year matching (ThunderCats 2011 vs 1985), retry on 429, request budget, bad or missing key. In the browser: service picker persistence, your service as the primary button, the leaving dialog linking to the exact show, buy/rent and attribution, Library and Home service views, guide badges and the Watchable filter. Official YouTube episode playback worked in the privacy-enhanced embed, in a 16:9 frame. A build with no availability data falls back cleanly. Not yet run against the real Watchmode API (no key yet).
+
 Not yet tested: a real foldable or physical iPhone, PWA installation, or Safari versions older than iOS 17.4 / macOS 14, which can't play WebM. On those, the player shows a "format not supported" message instead of playing.
 
 ## Known limitations / roadmap
 
 - **Media hosting:** files are served straight from `upload.wikimedia.org`, which rate-limits heavy use (HTTP 429). That happened during testing. For real traffic, mirror the public-domain files to your own storage or CDN and point `media.generated.json` at them. Add MP4/H.264 versions for older Safari at the same time.
 - **Captions:** none of the current files has caption tracks. The `captions` field is wired up for when they're added.
-- **Provider links:** none verified yet, so no copyrighted show links to a specific service.
+- **Provider links:** appear once `WATCHMODE_API_KEY` is set. Name+year matching can miss shows; check the script's "no confident match" list and add overrides.
+- **YouTube coverage:** one allowlisted channel and one curated episode until `YOUTUBE_API_KEY` is set, and networks rotate which episodes are up.
 - **Artwork:** only public-domain shows have images (frames from the films). Other shows use generated title cards until licensed artwork or an approved metadata API is added.
 - **Content notes:** add per-episode advisories for dated stereotypes in vintage cartoons.
 - **Episodes:** episode-level records exist only for the playable series.
